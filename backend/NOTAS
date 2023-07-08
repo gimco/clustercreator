@@ -1,0 +1,13 @@
+NOTAS
+=====
+
+python3 -m venv venv
+source venv/bin/activate
+pip install flask
+pip install flask_cors
+
+
+curl "http://localhost:5000/list"
+curl "http://localhost:5000/destroy?env=prueba"
+curl "http://localhost:5000/create?env=prueba&correo=bruno@gmail.com&nombre=Bruno&tipo=XL&nodos=3"
+curl "http://localhost:5000/state?env=prueba"
