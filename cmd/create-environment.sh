@@ -17,5 +17,16 @@ terraform -chdir=$BASE_TERRAFORM \
   -var="nodes_count=$N_NODOS" \
   -state=$CONFIG/$ENV_NAME/tf-state.json 2>&1 | ts -s >> $CONFIG/$ENV_NAME/creation.log 
 
-# ¿Como comprobar o esperar a que el slurm ya esté listo?
-# Envio de correo informando de la creación del entorno
+# Obtener la IP publica del nodo master
+JUPYTER=$(cat $CONFIG/$ENV_NAME/tf-state.json | jq -r .outputs.master_public_ip.value[0][0])
+if [ $JUPYTER = "null" ]; then
+  exit 1
+fi
+
+# Esperar a que jupyter esté listo
+while ! nc -z $JUPYTER 8888 &> /dev/null
+do
+  printf "%c" "."
+done
+
+echo "Jupyter disponible!" >> $CONFIG/$ENV_NAME/creation.log

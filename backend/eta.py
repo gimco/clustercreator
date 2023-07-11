@@ -34,8 +34,9 @@ def estimated_progress(lines):
 
 patterns = parse_lines([
     ('00:08', 'Creando VPC', 'aws_vpc.main_vpc_hpc: Creating...'),
-    ('00:21', 'Creando subredes', 'aws_subnet.main_subnet_hpc: Creating...'),
+    ('00:21', 'Configurando subredes', 'aws_subnet.main_subnet_hpc: Creating...'),
     ('00:32', 'Creando nodos de computación', 'aws_network_interface.lanmaster: Creating...'),
-    ('00:47', 'Creando entorno Jupyter', 'aws_instance.master: Creating...'),
-    ('01:01', '', 'Apply complete! Resources'),
+    ('00:47', 'Inicializando cluster', 'aws_instance.master: Creating...'),
+    ('01:01', 'Activando entorno Jupyter', 'Apply complete! Resources'),
+    ('01:20', '', 'Jupyter disponible!'),
 ])
