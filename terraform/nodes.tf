@@ -20,7 +20,7 @@ resource "aws_instance" "nodes" {
     do
       printf "%c" "."
     done
-    sleep 3
+    sleep 5
 
     # Montar NFS
     mkdir -p /shared
