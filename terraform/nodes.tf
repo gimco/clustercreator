@@ -25,7 +25,11 @@ resource "aws_instance" "nodes" {
     # Montar NFS
     mkdir -p /shared
     echo "172.31.0.100:/shared /shared nfs defaults 0 0" >> /etc/fstab
-    mount -a
+    
+    while ! mount -a
+    do
+      sleep 3
+    done
 
     cat /shared/hosts.txt >> /etc/hosts
 
