@@ -46,7 +46,7 @@ resource "aws_instance" "master" {
 
 		# Descargamos los ejemplos
 		wget -c http://www.numberworld.org/y-cruncher/y-cruncher%20v0.7.10.9513-static.tar.xz -O - |\
-				tar -C /shared/software -Jx &
+				tar -C /shared/software -Jx && mv "/shared/software/y-cruncher v0.7.10.9513-static" /shared/software/pi &
 
 		cat << 'EJEMPLO' > /shared/software/job1CPU-pi.sl
 		#!/bin/bash
@@ -56,7 +56,7 @@ resource "aws_instance" "master" {
 		#SBATCH --ntasks=1      # MPI processes
 		#SBATCH --output=1cpuslurm-%j.out
 
-		./y-cruncher skip-warnings bench 100m
+		/shared/software/pi/y-cruncher skip-warnings bench 100m
 		EJEMPLO
 
 		cat << 'EJEMPLO' > /shared/software/job4CPU-pi.sl
@@ -67,7 +67,7 @@ resource "aws_instance" "master" {
 		#SBATCH --ntasks=4      # MPI processes
 		#SBATCH --output=4cpuslurm-%j.out
 
-		./y-cruncher skip-warnings bench 100m
+		/shared/software/pi/y-cruncher skip-warnings bench 100m
 		EJEMPLO
 
 
