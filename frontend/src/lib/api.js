@@ -9,3 +9,9 @@ export function getAPI() {
   }
  return url;
 }
+
+window["cambiar_backend"] = function (url) {
+  localStorage.setItem('base_api_url', url)
+}
+
+console.log('Puedes cambiar la url del backend llamando a la función: cambiar_backend("http://xxxxxxx")')
