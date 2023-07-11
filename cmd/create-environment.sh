@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 CONFIG=/opt/clustercreator/config
 BASE_TERRAFORM=/opt/clustercreator/terraform

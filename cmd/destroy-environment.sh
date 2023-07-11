@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 ENV_NAME=$1
 CONFIG=/opt/clustercreator/config
