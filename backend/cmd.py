@@ -34,7 +34,7 @@ def terraform_get_url(env):
     # Analizar un archivo JSON
     with open(f'{FILE_PATH_PREFIX}/{env}/tf-state.json') as tf_state_json:
         data = json.load(tf_state_json)
-        value = data["outputs"]["vpc_id"]["value"]
+        value = data["outputs"]["master_public_ip"]["value"][0][0]
         return f"http://{value}:8888"
 
 def terraform_estimated_progress(env, pid):
