@@ -1,11 +1,3 @@
-data "aws_iam_role" "lab_role" {
-  name = "LabRole"
-}
-
-resource "aws_iam_instance_profile" "lab_profile" {
-  name = "test_profile"
-  role = data.aws_iam_role.lab_role.name
-}
 
 resource "aws_instance" "nodes" {
   ami           = var.slurm_template_ami
