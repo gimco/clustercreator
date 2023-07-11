@@ -9,6 +9,7 @@ terraform -chdir=$BASE_TERRAFORM \
   destroy \
   -auto-approve \
   -no-color \
+  -var="cliente=$ENV_NAME" \
   -state=$CONFIG/$ENV_NAME/tf-state.json \
   -state-out=$CONFIG/$ENV_NAME/tf-state-final.json > $CONFIG/$ENV_NAME/destroy.log 2>&1
 

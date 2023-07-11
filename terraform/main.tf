@@ -9,7 +9,8 @@ resource "aws_vpc" "main_vpc_hpc"{
 	instance_tenancy = "default"
 
 	tags = {
-		Name = "main_vpc_hpc"	
+		Name = "vpc-${var.cliente}"
+		Cliente = var.cliente
 	}
 }
 
@@ -17,7 +18,8 @@ resource "aws_internet_gateway" "main_internet_gateway"{
 	vpc_id = aws_vpc.main_vpc_hpc.id
 
 	tags = { 
-		Name="main_internet_gateway"		
+		Name="iw-${var.cliente}"
+		Cliente = var.cliente
 	}
 }
 
@@ -28,7 +30,8 @@ resource "aws_subnet" "main_subnet_hpc" {
 	map_public_ip_on_launch = "true"
 
 	tags = {
-		Name="main_subnet_hpc"		
+		Name="subnet-${var.cliente}"
+		Cliente = var.cliente
 	}
 }
 
@@ -40,7 +43,8 @@ resource "aws_route_table" "Custom_Main_Route_Table"{
 		gateway_id = aws_internet_gateway.main_internet_gateway.id
 	}
 	tags = {
-		Name="Custon_Main_Route_Table"
+		Name="route-table-${var.cliente}"
+		Cliente = var.cliente
 	}
 }
 
@@ -55,12 +59,17 @@ resource "tls_private_key" "pk" {
 }
 
 resource "aws_key_pair" "kp" {
-  key_name      = "hpc-key"
+  key_name      = "kp-${var.cliente}"
   public_key    = tls_private_key.pk.public_key_openssh
 
   provisioner "local-exec" {
     command = <<-EOT
-      echo "${tls_private_key.pk.private_key_pem}" > hpc-key.pem
+      echo "${tls_private_key.pk.private_key_pem}" > ../config/${var.cliente}/private.pem
     EOT
+  }
+
+  tags = {
+	Name="kp-${var.cliente}"
+	Cliente = var.cliente
   }
 }

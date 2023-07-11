@@ -58,7 +58,7 @@ resource "aws_security_group" "SG_hpc"{
 	}
 	tags = {
 		Name = "HPC rules"
-		
+		Cliente = var.cliente
 	}
 
 

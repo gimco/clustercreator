@@ -9,3 +9,7 @@ variable "nodes_count" {
 variable "slurm_template_ami" {
 	default = "ami-083f9de3a7dec6189"
 }
+
+variable "cliente" {
+  type = string
+}

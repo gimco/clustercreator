@@ -35,6 +35,7 @@ resource "aws_instance" "nodes" {
 
   tags = {
         Name = "slurmnode${count.index + 1}"
+        Cliente = var.cliente
     }
 }
 

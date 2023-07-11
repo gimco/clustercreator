@@ -4,7 +4,8 @@ resource "aws_network_interface" "lanmaster" {
   security_groups = [aws_security_group.SG_hpc.id]
 
   tags = {
-    Name = "private master static ip"
+    Name = "ni-${var.cliente}"
+    Cliente = var.cliente
   }
 }
 
@@ -77,6 +78,7 @@ resource "aws_instance" "master" {
 
 	tags = {
         Name = "slurmmaster"
+        Cliente = var.cliente
   	}
 }
 

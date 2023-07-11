@@ -13,6 +13,7 @@ terraform -chdir=$BASE_TERRAFORM \
   apply \
   -auto-approve \
   -no-color \
+  -var="cliente=$ENV_NAME" \
   -var="nodes_count=$N_NODOS" \
   -state=$CONFIG/$ENV_NAME/tf-state.json 2>&1 | ts -s >> $CONFIG/$ENV_NAME/creation.log 
 
