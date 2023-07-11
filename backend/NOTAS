@@ -7,6 +7,8 @@ pip install -r requirements.txt
 python app.py
 
 
+En desarrollo se puede iniciar con recarga de cambios automático con:
+flask --app app.py --debug run
 
 curl "http://localhost:5000/list"
 curl "http://localhost:5000/destroy?env=prueba"
