@@ -1,0 +1,100 @@
+APROVISIONAMIENTO MANUAL DE LA AMI
+##################################
+
+Para mejorar los tiemos de creación, se crea una ami que sirve de base para las máquinas slurm.
+
+
+DEBIAN_FRONTEND=noninteractive
+curl -sL https://deb.nodesource.com/setup_12.x | bash -
+useradd -m admin -s /usr/bin/bash -d /home/admin && echo "admin:admin" | chpasswd && adduser admin  && echo "admin     ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers 
+apt install software-properties-common -y
+add-apt-repository ppa:deadsnakes/ppa
+apt update -y
+apt-cache policy python3.9
+apt install apt-transport-https build-essential ca-certificates curl dirmngr git libopenmpi-dev lsb-release mariadb-server munge nfs-common nfs-kernel-server python3-pip python3.9 slurm-client slurmctld slurmd vim wget jq awscli
+
+apt install nodejs -y && npm install -g configurable-http-proxy
+
+pip3 install mpi4py
+pip3 install markupsafe==2.0.1
+pip3 install jupyterlab==2.1.2 
+pip3 install jupyterlab_slurm
+
+
+cat << 'EOF' > /etc/slurm/slurm.conf 
+SlurmctldHost=slurmmaster
+MpiDefault=none
+ProctrackType=proctrack/linuxproc
+ReturnToService=1
+SlurmctldPidFile=/var/run/slurmctld.pid
+SlurmctldPort=6817
+SlurmdPidFile=/var/run/slurmd.pid
+SlurmdPort=6818
+SlurmdSpoolDir=/var/spool/slurmd
+SlurmUser=root
+StateSaveLocation=/var/spool
+SwitchType=switch/none
+TaskPlugin=task/affinity
+#TaskPluginParam=Sched
+InactiveLimit=0
+KillWait=30
+MinJobAge=300
+SlurmctldTimeout=120
+SlurmdTimeout=300
+Waittime=0
+SchedulerType=sched/backfill
+SelectType=select/cons_res
+SelectTypeParameters=CR_Core
+AccountingStorageType=accounting_storage/none
+AccountingStoreFlags=job_comment
+ClusterName=cluster
+JobCompType=jobcomp/none
+JobAcctGatherFrequency=30
+JobAcctGatherType=jobacct_gather/none
+SlurmctldDebug=error
+SlurmctldLogFile=/var/log/slurm/slurmctld.log
+SlurmdDebug=error
+SlurmdLogFile=/var/log/slurm/slurmd.log
+NodeName=slurmnode[1-10] CPUs=2 State=UNKNOWN
+PartitionName=team4 Nodes=slurmnode[1-10] Default=YES MaxTime=INFINITE State=UP
+EOF
+
+# sed -i "s/REPLACE_CPU/CPUs=$(nproc)/g" /etc/slurm/slurm.conf
+
+##################################
+#
+# Crear la una ami a partir de la instancia anterior
+# 
+##################################
+
+
+
+
+
+
+# MASTER: Crear ejemplo para computación
+mkdir /shared/software
+wget -P /shared/software -O /shared/software/pi.tar.xz http://www.numberworld.org/y-cruncher/y-cruncher%20v0.7.10.9513-static.tar.xz
+tar -xvf /shared/software/pi.tar.xz
+
+cat << 'EOF' > /shared/software/job1CPU-pi.sl
+#!/bin/bash
+#SBATCH -J PI-1CPU
+#SBATCH --time=01:00:00         # Walltime
+#SBATCH --mem-per-cpu=1         # memory/cpu
+#SBATCH --ntasks=1      # MPI processes
+#SBATCH --output=1cpuslurm-%j.out
+
+./y-cruncher skip-warnings bench 100m
+EOF
+
+cat << 'EOF' > /shared/software/job4CPU-pi.sl
+#!/bin/bash
+#SBATCH -J PI-4CPU
+#SBATCH --time=01:00:00         # Walltime
+#SBATCH --mem-per-cpu=1         # memory/cpu
+#SBATCH --ntasks=4      # MPI processes
+#SBATCH --output=4cpuslurm-%j.out
+
+./y-cruncher skip-warnings bench 100m
+EOF
