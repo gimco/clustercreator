@@ -12,7 +12,7 @@ terraform -chdir=$BASE_TERRAFORM \
   apply \
   -auto-approve \
   -no-color \
-  -var="nodos_count=$N_NODOS" \
+  -var="nodes_count=$N_NODOS" \
   -state=$CONFIG/$ENV_NAME/tf-state.json 2>&1 | ts -s >> $CONFIG/$ENV_NAME/creation.log 
 
 # ¿Como comprobar o esperar a que el slurm ya esté listo?
